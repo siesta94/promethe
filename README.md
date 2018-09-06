@@ -1,3 +1,5 @@
-# promethe
-# Prometheus and Grafana ansible installation
-ansible-playbook -i inventory/hosts playbook.yml
+# ---- Prometheus and Grafana ----
+
+# After editing hosts file start with command:
+
+# ansible-playbook -i inventory/hosts playbook.yml
