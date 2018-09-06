@@ -1,5 +1,5 @@
 # ---- Prometheus and Grafana ----
 
-# After editing hosts file start with command:
+ After editing hosts file start with command:
 
-# ansible-playbook -i inventory/hosts playbook.yml
+ ansible-playbook -i inventory/hosts playbook.yml
