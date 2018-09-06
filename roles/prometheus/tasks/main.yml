@@ -1,11 +1,4 @@
 ---
-- hosts: prometheus
-  remote_user: stasic
-  become: yes
-  become_method: sudo
-  vars:
-    node_exporter_version: 0.14.0
-  tasks:
     - name: Create group
       group:
         name: prometheus
@@ -48,20 +41,20 @@
 
     - name: Download node exporter
       get_url:
-        url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        url: https://github.com/prometheus/node_exporter/releases/download/v0.16.0/node_exporter-0.16.0.linux-amd64.tar.gz
         dest: /opt/prometheus
 
     - name: unarchive node exporter
       unarchive:
         remote_src: yes
-        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        src: /opt/prometheus/node_exporter-0.16.0.linux-amd64.tar.gz
         dest: /opt/prometheus
 
     - name: Create symlink to node exporter
       file:
         path: /usr/bin/node_exporter
         state: link
-        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
+        src: /opt/prometheus/node_exporter-0.16.0.linux-amd64/node_exporter
 
     - name: Installing Prometheus
       apt:
