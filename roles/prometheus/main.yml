@@ -1,0 +1,87 @@
+---
+- hosts: prometheus
+  remote_user: root
+  vars:
+    node_exporter_version: 0.14.0
+  tasks:
+    - name: Create group
+      group:
+        name: prometheus
+        state: present
+
+    - name: Create user
+      user:
+        name: prometheus
+        group: prometheus
+        createhome: no
+        system: yes
+        state: present
+
+    - name: Create opt directory for prometheus
+      file:
+        path: /opt/prometheus
+        state: directory
+
+    - name: Download and install GPG key
+      apt_key:
+        url: https://packagecloud.io/gpg.key
+        state: present
+
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: present
+
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+
+    - name: Adding Grafana apt repo
+      shell: curl -s https://packagecloud.io/install/repositories/grafana/stable/script.deb.sh | bash
+
+    - name: Update packages
+      apt:
+        upgrade: yes
+
+    - name: Download node exporter
+      get_url:
+        url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        dest: /opt/prometheus
+
+    - name: unarchive node exporter
+      unarchive:
+        remote_src: yes
+        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        dest: /opt/prometheus
+
+    - name: Create symlink to node exporter
+      file:
+        path: /usr/bin/node_exporter
+        state: link
+        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
+
+    - name: Installing Prometheus
+      apt:
+        name: prometheus
+        state: present
+
+    - name: Enabling on startup Prometheus    
+      systemd:
+        name: prometheus.service
+        enabled: yes
+
+    - name: Installing Grafana
+      apt:
+        name: grafana
+        state: present
+
+    - name: Enabling on startup Grafana
+      systemd:
+        name: grafana-server
+        enabled: yes
+
+    - name: Restart Grafana
+      service:
+        name: grafana-server
+        state: restarted
