@@ -1,7 +1,7 @@
 ---
 - hosts: prometheus
-  remote_user: stasic
-  become: yes
-  become_method: sudo
+  remote_user: root
+  # become: yes
+  # become_method: sudo
   roles:
      - prometheus

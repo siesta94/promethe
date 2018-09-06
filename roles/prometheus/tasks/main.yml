@@ -80,3 +80,19 @@
       service:
         name: grafana-server
         state: restarted
+
+    - name: Install needed packages (Debian 9)
+      apt: name={{ item }} state=present
+      with_items:
+          - iptables-persistent
+          - ebtables
+
+    - name: Remove not needed packages (Debian 9)
+      apt: name={{ item }} state=absent
+      with_items:
+          - iptables-nftables-compat
+          - nftables
+    - name: Setting default iptables rules (Debian 9)
+      copy:  
+        src: d9-iptables 
+        dest: /etc/iptables/rules.v4
