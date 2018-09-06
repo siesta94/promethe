@@ -1,6 +1,8 @@
 ---
 - hosts: prometheus
-  remote_user: root
+  remote_user: stasic
+  become: yes
+  become_method: sudo
   vars:
     node_exporter_version: 0.14.0
   tasks:
