@@ -35,9 +35,9 @@
     - name: Adding Grafana apt repo
       shell: curl -s https://packagecloud.io/install/repositories/grafana/stable/script.deb.sh | bash
 
-    - name: Update packages
-      apt:
-        upgrade: yes
+      #    - name: Update packages
+      #apt:
+      #  upgrade: yes
 
     - name: Download node exporter
       get_url:
